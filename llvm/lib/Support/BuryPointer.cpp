@@ -19,6 +19,7 @@ void BuryPointer(const void *Ptr) {
   // If this function is called more than kGraveYardMaxSize times, the pointers
   // will not be properly buried and a leak detector will report a leak, which
   // is what we want in such case.
+#ifndef BINJI_HACK
   static const size_t kGraveYardMaxSize = 16;
   LLVM_ATTRIBUTE_UNUSED static const void *GraveYard[kGraveYardMaxSize];
   static std::atomic<unsigned> GraveYardSize;
@@ -26,6 +27,7 @@ void BuryPointer(const void *Ptr) {
   if (Idx >= kGraveYardMaxSize)
     return;
   GraveYard[Idx] = Ptr;
+#endif
 }
 
 }

@@ -11,6 +11,8 @@
 //
 //===----------------------------------------------------------------------===//
 
+#undef _LIBCPP_HAS_NO_THREADS
+
 #include "llvm/Support/ThreadPool.h"
 
 #include "llvm/Config/llvm-config.h"

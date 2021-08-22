@@ -204,13 +204,21 @@ static StringRef Argv0;
 // if there is, it's not our direct responsibility. For whatever reason, our
 // continued execution is no longer desirable.
 static const int IntSigs[] = {
+#ifdef BINJI_HACK
+    0
+#else
   SIGHUP, SIGINT, SIGPIPE, SIGTERM, SIGUSR1, SIGUSR2
+#endif
 };
 
 // Signals that represent that we have a bug, and our prompt termination has
 // been ordered.
 static const int KillSigs[] = {
+#ifdef BINJI_HACK
+    0
+#else
   SIGILL, SIGTRAP, SIGABRT, SIGFPE, SIGBUS, SIGSEGV, SIGQUIT
+#endif
 #ifdef SIGSYS
   , SIGSYS
 #endif
@@ -224,6 +232,10 @@ static const int KillSigs[] = {
   , SIGEMT
 #endif
 };
+
+#ifdef BINJI_HACK
+    struct sigaction { };
+#endif
 
 static std::atomic<unsigned> NumRegisteredSignals = ATOMIC_VAR_INIT(0);
 static struct {
@@ -342,10 +354,12 @@ static RETSIGTYPE SignalHandler(int Sig) {
         return OldInterruptFunction();
 
       // Send a special return code that drivers can check for, from sysexits.h.
+#ifndef BINJI_HACK
       if (Sig == SIGPIPE)
         exit(EX_IOERR);
 
       raise(Sig);   // Execute the default handler.
+#endif
       return;
    }
   }

@@ -298,7 +298,9 @@ static void uninstallExceptionOrSignalHandlers() {
 static const int Signals[] =
     { SIGABRT, SIGBUS, SIGFPE, SIGILL, SIGSEGV, SIGTRAP };
 static const unsigned NumSignals = array_lengthof(Signals);
+#ifndef BINJI_HACK
 static struct sigaction PrevActions[NumSignals];
+#endif
 
 static void CrashRecoverySignalHandler(int Signal) {
   // Lookup the current thread local recovery object.
