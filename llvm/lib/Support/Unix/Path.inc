@@ -59,7 +59,7 @@
 #include <sys/types.h>
 #if !defined(__APPLE__) && !defined(__OpenBSD__) && !defined(__FreeBSD__) &&   \
     !defined(__linux__) && !defined(__FreeBSD_kernel__)
-#ifndef BINJI_HACK
+#ifndef COA_BINJI_HACK
 #include <sys/statvfs.h>
 #define STATVFS statvfs
 #define FSTATVFS fstatvfs
@@ -241,7 +241,7 @@ std::string getMainExecutable(const char *argv0, void *MainAddr) {
   char link_path[MAXPATHLEN];
   if (realpath(DLInfo.dli_fname, link_path))
     return link_path;
-#elif !defined BINJI_HACK
+#elif !defined COA_BINJI_HACK
 #error GetMainExecutable is not implemented on this host yet.
 #endif
   return "";
@@ -264,7 +264,7 @@ uint32_t file_status::getLinkCount() const {
 }
 
 ErrorOr<space_info> disk_space(const Twine &Path) {
-#ifndef BINJI_HACK
+#ifndef COA_BINJI_HACK
   struct STATVFS Vfs;
   if (::STATVFS(Path.str().c_str(), &Vfs))
     return std::error_code(errno, std::generic_category());
@@ -412,7 +412,7 @@ std::error_code remove(const Twine &path, bool IgnoreNonExisting) {
   return std::error_code();
 }
 
-#ifndef BINJI_HACK
+#ifndef COA_BINJI_HACK
 static bool is_local_impl(struct STATVFS &Vfs) {
 #if defined(__linux__) || defined(__GNU__)
 #ifndef NFS_SUPER_MAGIC
@@ -457,7 +457,7 @@ static bool is_local_impl(struct STATVFS &Vfs) {
 #endif
 
 std::error_code is_local(const Twine &Path, bool &Result) {
-#ifndef BINJI_HACK
+#ifndef COA_BINJI_HACK
   struct STATVFS Vfs;
   if (::STATVFS(Path.str().c_str(), &Vfs))
     return std::error_code(errno, std::generic_category());
@@ -471,7 +471,7 @@ std::error_code is_local(const Twine &Path, bool &Result) {
 }
 
 std::error_code is_local(int FD, bool &Result) {
-#ifndef BINJI_HACK
+#ifndef COA_BINJI_HACK
   struct STATVFS Vfs;
   if (::FSTATVFS(FD, &Vfs))
     return std::error_code(errno, std::generic_category());

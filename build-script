@@ -1,0 +1,18 @@
+INC=$HOME/var/ext/llvm-wasm/wasi-include
+DEF="-D_WASI_EMULATED_MMAN -DHAVE_SYS_MMAN_H -DHAVE_SIGNAL_H -DCOA_BINJI_HACK"
+LIBS="-lwasi-emulated-signal -lwasi-emulated-mman"
+
+TBLGEN=$HOME/var/ext/llvm-wasm/llvm/build-x86/bin/llvm-tblgen
+
+# looks like CMake does not have CMAKE_SYSTEM_NAME=WASI available
+
+cmake -DLLVM_TARGETS_TO_BUILD=WebAssembly  -DLLVM_TARGET_ARCH=wasm32 \
+    -DCMAKE_CROSSCOMPILING=TRUE \
+    -DCMAKE_C_COMPILER=/opt/wasi-sdk/bin/clang -DCMAKE_CXX_COMPILER=/opt/wasi-sdk/bin/clang++ \
+    -DCMAKE_C_FLAGS="-include $INC/etc.h -I$INC $DEF" \
+    -DCMAKE_CXX_FLAGS="-include $INC/etc.h -I$INC -I$INC/c++ -Wno-gnu-include-next $DEF" \
+    -DLLVM_TABLEGEN=$TBLGEN -DCMAKE_EXE_LINKER_FLAGS="$LIBS -Wl,--allow-undefined" \
+    -DLLVM_ENABLE_THREADS=FALSE \
+    -DCMAKE_SKIP_BUILD_RPATH=TRUE -DCMAKE_SKIP_RPATH=TRUE \
+    -DHAVE_SIGALTSTACK=0 -DHAVE_POSIX_SPAWN=0 \
+    ../

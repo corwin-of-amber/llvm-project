@@ -1,0 +1,12 @@
+* copied wasi-kernel/include to wasi-include
+* added wasi-include/c++/__config
+
+In `llvm`:
+* need to first build llvm-tblgen for host:
+  mkdir build-x86; cd build-x86; cmake ..; cmake --build . --target llvm-tblgen
+* then configure w build-script:
+  mkdir build; cd build; ../../build-script; cmake --build . --target llc
+
+
+Local hacks:
+* Path is compiled with -DCOA_BINJI_HACK; need to check about the other BINJI_HACKs.
