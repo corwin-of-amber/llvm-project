@@ -1,0 +1,10 @@
+#pragma once
+
+#include_next <__config>
+
+
+#undef _LIBCPP_HAS_NO_THREADS
+#undef _LIBCPP_HAS_NO_ATOMIC_HEADER
+#define _LIBCPP_HAS_THREAD_API_PTHREAD
+
+

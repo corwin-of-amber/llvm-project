@@ -1,0 +1,11 @@
+#pragma once
+
+
+#undef _LIBCPP_HAS_NO_THREADS
+#undef _LIBCPP_HAS_NO_ATOMIC_HEADER
+#define _LIBCPP_HAS_THREAD_API_PTHREAD
+
+#undef _LIBCPP_MUTEX
+
+
+#include_next <mutex>
